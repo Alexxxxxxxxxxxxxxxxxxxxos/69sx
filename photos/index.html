@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gallery — alex.</title>
+  <meta name="description" content="photography by alex.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='4' width='20' height='16' rx='2' fill='none' stroke='%23111' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%23111'/%3E%3C/svg%3E">
+  <style>
+    .gallery-header {
+      padding: 140px 40px 60px;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .gallery-header h1 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400;
+      color: #111;
+      letter-spacing: -0.03em;
+    }
+
+    .gallery-header p {
+      font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      color: #999;
+      letter-spacing: 0.06em;
+      margin-top: 12px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 0 40px 80px;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .gallery-grid .photo-frame {
+      aspect-ratio: 3/4;
+    }
+
+    .gallery-section {
+      padding: 0 40px 80px;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .gallery-section-label {
+      font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #999;
+      margin-bottom: 16px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      color: #888;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 200ms ease;
+    }
+
+    .back-link:hover { color: #111; }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px 60px;
+      }
+      .gallery-header {
+        padding: 100px 24px 40px;
+      }
+      .gallery-section {
+        padding: 0 24px 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">alex.</a>
+    <ul class="nav-links">
+      <li><a href="../#about">about</a></li>
+      <li><a href="../#photos">photos</a></li>
+      <li><a href="./">gallery</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="gallery-header">
+    <a href="../" class="back-link">← back</a>
+    <h1>gallery</h1>
+    <p>nikon z6iii · london</p>
+  </div>
+
+  <!-- FAVOURITE PHOTOS -->
+  <div class="gallery-section">
+    <div class="gallery-section-label">selected work</div>
+    <div class="gallery-grid" id="fav-grid"></div>
+  </div>
+
+  <!-- MY LIFE -->
+  <div class="gallery-section">
+    <div class="gallery-section-label">my life</div>
+    <div class="gallery-grid" id="life-grid"></div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-panel">
+      <button class="lightbox-close">close</button>
+      <img class="lightbox-img" src="" alt="" id="lightbox-img">
+      <div class="lightbox-meta" id="lightbox-meta"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const favPhotos = [
+        {
+          src: '../assets/photos/temp_image_1784892226361.jpeg',
+          camera: 'Nikon Z6Ⅲ', lens: 'NIKKOR Z 24-70mm f/4 S',
+          aperture: 'ƒ/4.0', focal: '42mm', shutter: '1/640', iso: 'ISO 6400',
+          location: 'london bridge'
+        },
+        {
+          src: '../assets/photos/temp_image_1784892230103.jpeg',
+          camera: 'Nikon Z6Ⅲ', lens: 'NIKKOR Z 24-70mm f/4 S',
+          aperture: 'ƒ/4.0', focal: '70mm', shutter: '1/400', iso: 'ISO 12800',
+          location: 'the city'
+        },
+        {
+          src: '../assets/photos/temp_image_1784892233400.jpeg',
+          camera: 'Nikon Z6Ⅲ', lens: 'NIKKOR Z 24-70mm f/4 S',
+          aperture: 'ƒ/4.0', focal: '54mm', shutter: '1/100', iso: 'ISO 1600',
+          location: 'bermondsey'
+        }
+      ];
+
+      const lifePhotos = [
+        { src: '../assets/photos/IMG_2489.jpeg', location: '' },
+        { src: '../assets/photos/IMG_3321.jpeg', location: '' },
+        { src: '../assets/photos/IMG_5133.jpeg', location: '' }
+      ];
+
+      function buildGrid(containerId, photos) {
+        const grid = document.getElementById(containerId);
+        if (!grid) return;
+        photos.forEach((p, i) => {
+          const frame = document.createElement('div');
+          frame.className = 'photo-frame';
+          frame.innerHTML = `
+            <img src="${p.src}" alt="${p.location || ''}" loading="lazy">
+            <span class="photo-num">${String(i + 1).padStart(2, '0')}</span>
+          `;
+          frame.addEventListener('click', () => openLightbox(p));
+          grid.appendChild(frame);
+        });
+      }
+
+      buildGrid('fav-grid', favPhotos);
+      buildGrid('life-grid', lifePhotos);
+
+      // Lightbox
+      const lightbox = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      const lbMeta = document.getElementById('lightbox-meta');
+      const lbClose = lightbox.querySelector('.lightbox-close');
+      const lbBackdrop = lightbox.querySelector('.lightbox-backdrop');
+
+      function openLightbox(photo) {
+        lbImg.src = photo.src;
+        lbImg.alt = photo.location || '';
+        const hasMeta = photo.camera || photo.lens;
+        if (hasMeta) {
+          lbMeta.innerHTML = `
+            <span><span class="meta-label">camera</span> <span class="meta-value">${photo.camera || '—'}</span></span>
+            <span><span class="meta-label">lens</span> <span class="meta-value">${photo.lens || '—'}</span></span>
+            <span><span class="meta-label">aperture</span> <span class="meta-value">${photo.aperture || '—'}</span></span>
+            <span><span class="meta-label">focal</span> <span class="meta-value">${photo.focal || '—'}</span></span>
+            <span><span class="meta-label">shutter</span> <span class="meta-value">${photo.shutter || '—'}</span></span>
+            <span><span class="meta-label">iso</span> <span class="meta-value">${photo.iso || '—'}</span></span>
+            ${photo.location ? '<span><span class="meta-label">📍</span> <span class="meta-value">' + photo.location + '</span></span>' : ''}
+          `;
+        } else {
+          lbMeta.innerHTML = '<span class="meta-value">nikon z6iii</span>';
+        }
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+
+      lbClose.addEventListener('click', closeLightbox);
+      lbBackdrop.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>alex. — 69sx</title>
+  <meta name="description" content="alex. photographer. grime enthusiast. london.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='4' width='20' height='16' rx='2' fill='none' stroke='%23111' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%23111'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <div class="grain"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">alex.</a>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#photos">photos</a></li>
+      <li><a href="photos/">gallery</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-greeting">
+        <span id="hello-text">hello.</span><span class="cursor">|</span>
+      </p>
+
+      <h1 class="hero-name">i'm alex<span class="cursor" style="color:#666;font-size:0.6em;vertical-align:middle;margin-left:2px;">_</span></h1>
+
+      <div class="hero-roles">
+        <span>photographer</span>
+        <span>grime enthusiast</span>
+        <span>londoner</span>
+      </div>
+
+      <p class="weather-line" id="weather">—</p>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/gj1nj1" target="_blank" rel="noopener" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r="1.2"/></svg>
+        </a>
+        <span class="sep">/</span>
+        <a href="https://www.reddit.com/user/opqk" target="_blank" rel="noopener" title="Reddit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M8.5 14.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm7 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM12 6c-2.67 0-4.87 1.4-5.8 3.44C7.14 9.1 8.42 9.5 9.5 10h5c1.08-.5 2.36-.9 3.3-1.56A6.96 6.96 0 0 0 12 6zm0 12c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="white"/></svg>
+        </a>
+        <span class="sep">/</span>
+        <a href="https://www.flickr.com/photos/qehk" target="_blank" rel="noopener" title="Flickr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="12" r="5.5" fill="#FF0099"/><circle cx="17" cy="12" r="5.5" fill="#00A3FE"/></svg>
+        </a>
+        <span class="sep">/</span>
+        <a href="mailto:alex@69sx.com" title="Email">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.3a1.93 1.93 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <span class="section-label">about</span>
+      <div class="about-text">
+        <p>
+          south london kid with a nikon z6iii and a grime problem. i shoot what i see — london at night, faces in the crowd, the city breathing. this site is where i put the stuff that matters.
+        </p>
+        <p>
+          currently in contention for the orwell award. year 11. trying to make things that don't suck.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- PHOTOS -->
+  <section id="photos">
+    <div class="about-grid">
+      <span class="section-label">selected work</span>
+      <div>
+        <div class="photos-grid" id="photos-grid">
+          <!-- populated by JS -->
+        </div>
+        <a href="photos/" class="photos-link">view all →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- MUSIC -->
+  <section id="music">
+    <div class="about-grid">
+      <span class="section-label">listening</span>
+      <div class="music-content" id="now-playing">
+        <span style="font-family:'SF Mono',monospace;font-size:11px;color:#bbb;">loading last.fm...</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-left">69sx</span>
+    <span class="footer-right">
+      <a href="mailto:alex@69sx.com">alex@69sx.com</a>
+      &nbsp;·&nbsp;
+      london
+    </span>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop"></div>
+    <div class="lightbox-panel">
+      <button class="lightbox-close">close</button>
+      <img class="lightbox-img" src="" alt="" id="lightbox-img">
+      <div class="lightbox-meta" id="lightbox-meta"></div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
