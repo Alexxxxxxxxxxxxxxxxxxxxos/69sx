@@ -927,11 +927,17 @@ footer {
     max-width: 100%;
     grid-column: 1;
     grid-row: auto;
+    padding-top: 0;
+  }
+
+  .about-right p:first-of-type {
+    margin-top: 0;
   }
 
   .about-right {
     grid-column: 1;
     grid-row: auto;
+    transform: none;
   }
 
   .panel-content {
@@ -957,6 +963,10 @@ footer {
   }
 
   .hero-scroll { display: none; }
+
+  .contact-form {
+    max-width: 100%;
+  }
 
   footer { padding: 40px 24px; }
 
