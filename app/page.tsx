@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { siteConfig } from './site-config';
 
+type CurrencyCode = 'GBP' | 'EUR' | 'CAD' | 'AUD' | 'SGD' | 'AED' | 'CHF' | 'HKD';
+type OtherCurrency = Exclude<CurrencyCode, 'GBP'>;
+type ConvertedPricing = Record<CurrencyCode, string>;
+
+const otherCurrencies: OtherCurrency[] = ['EUR', 'CAD', 'AUD', 'SGD', 'AED', 'CHF', 'HKD'];
+
 function formatTime(value: number) {
   if (!Number.isFinite(value) || value < 0) return '00:00';
   const minutes = Math.floor(value / 60);
@@ -11,7 +17,7 @@ function formatTime(value: number) {
   return `${minutes}:${seconds}`;
 }
 
-function formatConvertedPrice(amount: number, currency: string) {
+function formatConvertedPrice(amount: number, currency: CurrencyCode) {
   const symbols: Record<string, string> = {
     GBP: '£',
     EUR: '€',
@@ -26,17 +32,6 @@ function formatConvertedPrice(amount: number, currency: string) {
   return `${symbols[currency] ?? `${currency} `}${formatted}${currency === 'AED' || currency === 'CHF' ? '' : ` ${currency}`}`;
 }
 
-type ConvertedPricing = {
-  gbp: string;
-  eur: string;
-  cad: string;
-  aud: string;
-  sgd: string;
-  aed: string;
-  chf: string;
-  hkd: string;
-};
-
 type LiveRates = {
   result?: string;
   rates?: Record<string, number>;
@@ -46,30 +41,30 @@ const LIVE_RATES_URL = 'https://open.er-api.com/v6/latest/USD';
 
 function fallbackPricing(): ConvertedPricing {
   return {
-    gbp: siteConfig.priceFallbacks.GBP,
-    eur: siteConfig.priceFallbacks.EUR,
-    cad: siteConfig.priceFallbacks.CAD,
-    aud: siteConfig.priceFallbacks.AUD,
-    sgd: siteConfig.priceFallbacks.SGD,
-    aed: siteConfig.priceFallbacks.AED,
-    chf: siteConfig.priceFallbacks.CHF,
-    hkd: siteConfig.priceFallbacks.HKD,
+    GBP: siteConfig.priceFallbacks.GBP,
+    EUR: siteConfig.priceFallbacks.EUR,
+    CAD: siteConfig.priceFallbacks.CAD,
+    AUD: siteConfig.priceFallbacks.AUD,
+    SGD: siteConfig.priceFallbacks.SGD,
+    AED: siteConfig.priceFallbacks.AED,
+    CHF: siteConfig.priceFallbacks.CHF,
+    HKD: siteConfig.priceFallbacks.HKD,
   };
 }
 
 function pricingFromRates(rates: Record<string, number>): ConvertedPricing | null {
-  const currencies = ['GBP', 'EUR', 'CAD', 'AUD', 'SGD', 'AED', 'CHF', 'HKD'];
+  const currencies: CurrencyCode[] = ['GBP', 'EUR', 'CAD', 'AUD', 'SGD', 'AED', 'CHF', 'HKD'];
   if (currencies.some((currency) => !rates[currency])) return null;
 
   return {
-    gbp: formatConvertedPrice(siteConfig.priceUsdAmount * rates.GBP, 'GBP'),
-    eur: formatConvertedPrice(siteConfig.priceUsdAmount * rates.EUR, 'EUR'),
-    cad: formatConvertedPrice(siteConfig.priceUsdAmount * rates.CAD, 'CAD'),
-    aud: formatConvertedPrice(siteConfig.priceUsdAmount * rates.AUD, 'AUD'),
-    sgd: formatConvertedPrice(siteConfig.priceUsdAmount * rates.SGD, 'SGD'),
-    aed: formatConvertedPrice(siteConfig.priceUsdAmount * rates.AED, 'AED'),
-    chf: formatConvertedPrice(siteConfig.priceUsdAmount * rates.CHF, 'CHF'),
-    hkd: formatConvertedPrice(siteConfig.priceUsdAmount * rates.HKD, 'HKD'),
+    GBP: formatConvertedPrice(siteConfig.priceUsdAmount * rates.GBP, 'GBP'),
+    EUR: formatConvertedPrice(siteConfig.priceUsdAmount * rates.EUR, 'EUR'),
+    CAD: formatConvertedPrice(siteConfig.priceUsdAmount * rates.CAD, 'CAD'),
+    AUD: formatConvertedPrice(siteConfig.priceUsdAmount * rates.AUD, 'AUD'),
+    SGD: formatConvertedPrice(siteConfig.priceUsdAmount * rates.SGD, 'SGD'),
+    AED: formatConvertedPrice(siteConfig.priceUsdAmount * rates.AED, 'AED'),
+    CHF: formatConvertedPrice(siteConfig.priceUsdAmount * rates.CHF, 'CHF'),
+    HKD: formatConvertedPrice(siteConfig.priceUsdAmount * rates.HKD, 'HKD'),
   };
 }
 
@@ -149,6 +144,7 @@ export default function Home() {
   const [isBackgroundReady, setIsBackgroundReady] = useState(false);
   const [isIntroReady, setIsIntroReady] = useState(false);
   const [pricing, setPricing] = useState<ConvertedPricing>(fallbackPricing);
+  const [selectedCurrency, setSelectedCurrency] = useState<OtherCurrency>('EUR');
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -260,10 +256,22 @@ export default function Home() {
         <section className="sale-details" aria-hidden={!isSaleOpen}>
           <p className="sale-price">{siteConfig.priceUsd}</p>
           <div className="sale-conversions" aria-live="polite">
-            <p>≈ {pricing.gbp} · {pricing.eur}</p>
-            <p>{pricing.cad} · {pricing.aud}</p>
-            <p>{pricing.sgd} · {pricing.aed}</p>
-            <p>{pricing.chf} · {pricing.hkd}</p>
+            <p>≈ {pricing.GBP}</p>
+            <label className="currency-picker">
+              <span className="currency-picker-label">other currencies</span>
+              <span className="currency-select-wrap">
+                <select
+                  className="currency-select"
+                  aria-label="Show the price in another currency"
+                  value={selectedCurrency}
+                  onChange={(event) => setSelectedCurrency(event.currentTarget.value as OtherCurrency)}
+                >
+                  {otherCurrencies.map((currency) => (
+                    <option key={currency} value={currency}>{pricing[currency]}</option>
+                  ))}
+                </select>
+              </span>
+            </label>
           </div>
           <p className="sale-negotiation">{siteConfig.negotiationNote}</p>
           <a className="inquiries-link" href={`mailto:${siteConfig.inquiriesEmail}`} tabIndex={isSaleOpen ? 0 : -1}>

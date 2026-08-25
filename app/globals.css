@@ -16,7 +16,7 @@ body {
   font-family: ui-rounded, "Avenir Next", Avenir, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-button, a { font: inherit; }
+button, a, select { font: inherit; }
 
 .site-shell {
   position: relative;
@@ -146,7 +146,7 @@ button, a { font: inherit; }
   transition: transform 180ms ease, color 180ms ease;
 }
 .audio-button:hover { transform: scale(1.12); color: #fff; }
-.audio-button:focus-visible, .sale-link:focus-visible, .close-button:focus-visible, .inquiries-link:focus-visible { outline: 1px solid var(--paper); outline-offset: 5px; }
+.audio-button:focus-visible, .sale-link:focus-visible, .close-button:focus-visible, .inquiries-link:focus-visible, .currency-select:focus-visible { outline: 1px solid var(--paper); outline-offset: 5px; }
 .audio-button span { font-size: 15px; line-height: 1; }
 .audio-time { min-width: 36px; font-size: 13px; letter-spacing: 0.03em; }
 
@@ -163,13 +163,16 @@ button, a { font: inherit; }
   animation: appear 900ms 120ms cubic-bezier(.2,.75,.25,1) both;
 }
 .sale-stage.is-open {
-  right: 50%;
-  bottom: 50%;
-  width: max-content;
-  max-width: calc(100vw - 48px);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(420px, calc(100vw - 32px));
   align-items: center;
   text-align: center;
-  transform: translate(50%, 50%);
+  animation: none;
+  transform: translate(-50%, -50%);
 }
 
 .sale-link {
@@ -225,9 +228,16 @@ button, a { font: inherit; }
   opacity: 1;
   transform: translateY(0);
 }
-.sale-price { margin: 0; color: var(--paper); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
-.sale-conversions { margin: 7px 0 0; color: rgba(244, 242, 237, 0.6); font-size: 12px; line-height: 1.65; }
+.sale-details { width: 100%; }
+.sale-price { margin: 0; color: var(--paper); font-size: clamp(18px, 4vw, 21px); font-weight: 500; letter-spacing: -0.02em; text-align: center; }
+.sale-conversions { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 7px 0 0; color: rgba(244, 242, 237, 0.6); font-size: 12px; line-height: 1.4; text-align: center; }
 .sale-conversions p { margin: 0; }
+.currency-picker { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.currency-picker-label { color: rgba(244, 242, 237, 0.34); font-size: 10px; letter-spacing: 0.04em; text-transform: lowercase; }
+.currency-select-wrap { position: relative; display: inline-flex; align-items: center; }
+.currency-select-wrap::after { position: absolute; right: 2px; color: rgba(244, 242, 237, 0.55); content: '⌄'; pointer-events: none; }
+.currency-select { max-width: calc(100vw - 64px); padding: 0 17px 0 0; border: 0; color: rgba(244, 242, 237, 0.68); background: transparent; appearance: none; cursor: pointer; text-align: center; }
+.currency-select option { color: #050606; background: var(--paper); }
 .sale-negotiation { margin: 20px 0 0; color: var(--soft-paper); font-size: 13px; }
 .rate-note { margin: 14px 0 0; color: rgba(244, 242, 237, 0.3); font-size: 10px; }
 .inquiries-link { display: inline-block; margin-top: 16px; color: rgba(244, 242, 237, 0.64); font-size: 12px; text-decoration: none; transition: color 180ms ease; }
