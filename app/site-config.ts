@@ -1,0 +1,22 @@
+export const siteConfig = {
+  name: '69sx',
+  domain: '69sx.com',
+  backgroundImage: '/assets/central-london.jpg',
+  audioFile: '/audio/it-aint-easy.mp3',
+  audioLabel: "it ain't easy",
+  priceUsdAmount: 6000,
+  priceUsd: '$6,000 USD',
+  priceFallbacks: {
+    GBP: '£4,401 GBP',
+    EUR: '€5,144 EUR',
+    CAD: 'C$8,303 CAD',
+    AUD: 'A$8,386 AUD',
+    SGD: 'S$7,622 SGD',
+    AED: 'AED 22,035',
+    CHF: 'CHF 4,814',
+    HKD: 'HK$47,024',
+  },
+  negotiationNote: 'serious enquiries only',
+  inquiriesEmail: 'xxx@69sx.com',
+  durationHint: '04:12',
+} as const;
