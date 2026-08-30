@@ -78,16 +78,37 @@ function AudioControl() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const attemptAutoplay = async () => {
+    const attemptPlayback = async () => {
       try {
         await audio.play();
         setIsPlaying(true);
+        return true;
       } catch {
         setIsPlaying(false);
+        return false;
       }
     };
 
-    void attemptAutoplay();
+    const removeGestureListeners = () => {
+      document.removeEventListener('pointerdown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+
+    const handleFirstInteraction = () => {
+      removeGestureListeners();
+      void attemptPlayback();
+    };
+
+    document.addEventListener('pointerdown', handleFirstInteraction, { passive: true });
+    document.addEventListener('touchstart', handleFirstInteraction, { passive: true });
+    document.addEventListener('keydown', handleFirstInteraction);
+
+    void attemptPlayback().then((didStart) => {
+      if (didStart) removeGestureListeners();
+    });
+
+    return removeGestureListeners;
   }, []);
 
   const togglePlayback = async () => {
@@ -111,7 +132,7 @@ function AudioControl() {
     <div className="audio-control">
       <audio
         ref={audioRef}
-        preload="metadata"
+        preload="auto"
         autoPlay
         src={siteConfig.audioFile}
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
